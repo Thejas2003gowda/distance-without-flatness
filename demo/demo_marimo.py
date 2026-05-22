@@ -31,18 +31,24 @@ def _imports(DEMO_UTILS_B64):
     import sys
     import os
 
+    # Force marimo WASM scanner to see scipy so it pre-loads it before any cell runs.
+    # demo_utils imports scipy.special but it is embedded as a string, invisible to the scanner.
+    from scipy.special import ive, i0e  # noqa: F401
+
     _is_wasm = sys.platform == 'emscripten'
 
     if _is_wasm:
-        import base64
+        import base64, types
         _src = base64.b64decode(DEMO_UTILS_B64).decode('utf-8')
-        with open('/home/pyodide/demo_utils.py', 'w') as _f:
-            _f.write(_src)
+        # Create the module in-memory (no filesystem required)
+        _mod = types.ModuleType('demo_utils')
+        _mod.__file__ = '<demo_utils embedded>'
+        exec(compile(_src, 'demo_utils.py', 'exec'), _mod.__dict__)
+        sys.modules['demo_utils'] = _mod
         THIS_DIR = '/home/pyodide'
     else:
         THIS_DIR = os.path.dirname(os.path.abspath(__file__))
-
-    sys.path.insert(0, THIS_DIR)
+        sys.path.insert(0, THIS_DIR)
 
     import numpy as np
     import matplotlib
