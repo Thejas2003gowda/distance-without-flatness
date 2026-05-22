@@ -341,7 +341,7 @@ def _sphere_3d(du, mo, np, sphere_k, sphere_data, sphere_algorithm, sphere_D):
     # and marimo cannot intercept drag-to-rotate events
     import plotly.io as _pio
     import html as _html_mod
-    _full = _pio.to_html(_fig, include_plotlyjs=True, full_html=True,
+    _full = _pio.to_html(_fig, include_plotlyjs='cdn', full_html=True,
                          config={'displayModeBar': False})
     _escaped = _html_mod.escape(_full, quote=True)
     sphere_3d_plotly = mo.Html(
