@@ -2610,10 +2610,7 @@ def _layout(
 
     layout = mo.vstack([
         tabs,
-        mo.md(
-            "---\n"
-            "*MAA Seaway Section · Spring 2026 · St. John Fisher University, Rochester NY*"
-        ),
+        mo.md("---"),
     ])
 
     return layout, tabs
